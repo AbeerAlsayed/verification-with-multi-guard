@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Merchant;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 
 class CustomVerificationTokenController extends Controller
@@ -15,15 +17,12 @@ class CustomVerificationTokenController extends Controller
 
     public function verify(Request $request)
     {
-        if ($request->user('merchant')->hasVerifiedEmail()) {
-            return redirect()->intended(route('merchant.index').'?verified=1');
-        }
-
-        if ($request->user('merchant')->markEmailAsVerified()) {
-            event(new Verified($request->user('merchant')));
-        }
-
-        return redirect()->intended(route('merchant.index').'?verified=1');
+      $merchant=Merchant::where('verification_token',$request->token)->firstOrFail();
+     if (now() <$merchant->verification_token_till){
+         $merchant->verifyUsingVerificationToken();
+         return to_route('merchant.index');
+     }
+     abort('401');
     }
 
     public function resend(Request $request)

@@ -49,7 +49,7 @@ class Merchant extends Authenticatable implements MustVerifyEmail
 
     public function verifyUsingVerificationToken(){
         if (config('verification.way')== 'cvt'){
-            $this->email_verification_at=now();
+            $this->email_verified_at=now();
             $this->verification_token=null;
             $this->verification_token_till =null;
             $this->save();
