@@ -6,6 +6,7 @@ return[
     // email => with email verification using signed URLs (register)
     // cvt => with email verification using custom verification token ( register)
     // passwordless => passwordless authentication (Login)
+    // otp => OTP authentication (login)
 
-    'way' => 'passwordless',
+    'way' => 'otp',
 ];
